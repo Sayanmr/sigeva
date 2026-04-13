@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import model.Usuario;
+
 public class Login extends JFrame {
 
     private JTextField txtUsuario;
@@ -50,21 +52,20 @@ public class Login extends JFrame {
 
     private void login() {
 
-        String usuario = txtUsuario.getText();
-        String contraseña = new String(txtPassword.getPassword());
+        String usuarioTxt = txtUsuario.getText();
+        String password = new String(txtPassword.getPassword());
 
         LoginDAO dao = new LoginDAO();
+        Usuario usuario = dao.login(usuarioTxt, password);
 
-        if (dao.validarUsuario(usuario, contraseña)) {
+        if (usuario != null) {
 
-            JOptionPane.showMessageDialog(this, "Bienvenido");
-
-            MenuPrincipal menu = new MenuPrincipal();
+            MenuPrincipal menu = new MenuPrincipal(usuario);
             menu.setVisible(true);
             dispose();
+
         } else {
             JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
         }
-
     }
 }

@@ -1,5 +1,7 @@
 package view;
 
+import model.Usuario;
+
 import javax.swing.*;
 
 public class MenuPrincipal extends JFrame {
@@ -9,7 +11,7 @@ public class MenuPrincipal extends JFrame {
     JButton btnUsuarios;
     JButton btnPerfil;
 
-    public MenuPrincipal() {
+    public MenuPrincipal(Usuario usuario) {
 
         setTitle("Sistema de Vacunación");
         setSize(400, 300);
@@ -41,7 +43,7 @@ public class MenuPrincipal extends JFrame {
 
         btnPerfil.addActionListener(e -> {
 
-            PerfilUsuario perfil = new PerfilUsuario();
+            PerfilUsuario perfil = new PerfilUsuario(usuario);
             perfil.setVisible(true);
 
         });

@@ -1,13 +1,16 @@
 package view;
 
 import javax.swing.*;
+import model.Usuario;
 
 public class PerfilUsuario extends JFrame {
 
     JButton btnEditar;
     JButton btnLogout;
+    private Usuario usuarioActual;
 
-    public PerfilUsuario() {
+    public PerfilUsuario(Usuario usuario) {
+        this.usuarioActual = usuario;
 
         setTitle("Perfil de Usuario");
         setSize(300, 200);
@@ -22,12 +25,12 @@ public class PerfilUsuario extends JFrame {
         add(btnLogout);
 
         btnLogout.addActionListener(e -> {
-
             dispose();
+            new Login().setVisible(true);
+        });
 
-            Login login = new Login();
-            login.setVisible(true);
-
+        btnEditar.addActionListener(e -> {
+            new EditarPerfil(usuarioActual).setVisible(true);
         });
     }
 }

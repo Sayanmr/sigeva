@@ -1,6 +1,7 @@
 package dao;
 
 import database.Conexion;
+
 import java.sql.*;
 
 public class VacunaDAO {
@@ -9,7 +10,7 @@ public class VacunaDAO {
     public void registrarIngreso(String nombre, int cantidad) {
         String sql = "INSERT INTO vacunas(nombre, cantidad) VALUES (?, ?)";
 
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, nombre);
@@ -27,7 +28,7 @@ public class VacunaDAO {
     public void actualizarInventario(String nombre, int cantidad) {
         String sql = "UPDATE vacunas SET cantidad = cantidad + ? WHERE nombre = ?";
 
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, cantidad);
@@ -51,7 +52,7 @@ public class VacunaDAO {
 
         String sql = "SELECT * FROM vacunas WHERE nombre = ?";
 
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, nombre);
@@ -74,7 +75,7 @@ public class VacunaDAO {
     public void consultarInventario() {
         String sql = "SELECT * FROM vacunas";
 
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 

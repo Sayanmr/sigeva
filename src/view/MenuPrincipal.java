@@ -4,12 +4,18 @@ import model.Usuario;
 
 import javax.swing.*;
 
+import dao.LoteDAO;
+
+import java.util.List;
+
 public class MenuPrincipal extends JFrame {
 
     JButton btnVacunas;
     JButton btnLotes;
     JButton btnUsuarios;
     JButton btnPerfil;
+    JButton btnNotificaciones;
+
 
     public MenuPrincipal(Usuario usuario) {
 
@@ -34,6 +40,10 @@ public class MenuPrincipal extends JFrame {
         btnPerfil.setBounds(200, 120, 140, 40);
         add(btnPerfil);
 
+        btnNotificaciones = new JButton("🔔");
+        btnNotificaciones.setBounds(340, 10, 50, 30);
+        add(btnNotificaciones);
+
         btnUsuarios.addActionListener(e -> {
 
             RegistrarUsuario ventana = new RegistrarUsuario();
@@ -47,5 +57,42 @@ public class MenuPrincipal extends JFrame {
             perfil.setVisible(true);
 
         });
+        btnNotificaciones.addActionListener(e -> {
+
+            String mensaje = obtenerMensajeLotes();
+            JOptionPane.showMessageDialog(this, mensaje);
+            actualizarNotificaciones();
+        });
     }
+
+    private String obtenerMensajeLotes() {
+
+        LoteDAO dao = new LoteDAO();
+        List<String> lotes = dao.obtenerLotesPorVencer();
+
+        if (lotes.isEmpty()) {
+            return "No hay lotes próximos a vencer.";
+        }
+
+        String mensaje = "⚠ LOTES PRÓXIMOS A VENCER:\n\n";
+
+        for (String lote : lotes) {
+            mensaje += lote + "\n";
+        }
+
+        return mensaje;
+    }
+
+    private void actualizarNotificaciones() {
+
+        LoteDAO dao = new LoteDAO();
+        List<String> lotes = dao.obtenerLotesPorVencer();
+
+        if (lotes.isEmpty()) {
+            btnNotificaciones.setText("🔔");
+        } else {
+            btnNotificaciones.setText("🔔 " + lotes.size());
+        }
+    }
+
 }

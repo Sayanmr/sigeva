@@ -1,5 +1,6 @@
 package view;
 
+import model.Lote;
 import model.Usuario;
 import dao.LoteDAO;
 
@@ -114,22 +115,23 @@ public class MenuPrincipal extends JFrame {
 
     private String obtenerMensajeLotes() {
         LoteDAO dao = new LoteDAO();
-        List<String> lotes = dao.obtenerLotesPorVencer();
+        List<Lote> lotes = dao.obtenerLotesPorVencer();
 
         if (lotes.isEmpty()) {
             return "No hay lotes próximos a vencer.";
         }
 
         StringBuilder mensaje = new StringBuilder("⚠ LOTES PRÓXIMOS A VENCER:\n\n");
-        for (String lote : lotes) {
+        for (Lote lote : lotes) {
             mensaje.append(lote).append("\n");
         }
         return mensaje.toString();
     }
 
     private void actualizarNotificaciones() {
+
         LoteDAO dao = new LoteDAO();
-        List<String> lotes = dao.obtenerLotesPorVencer();
+        List<Lote> lotes = dao.obtenerLotesPorVencer();
 
         if (lotes.isEmpty()) {
             btnNotificaciones.setText("🔔");

@@ -101,7 +101,10 @@ public class MenuPrincipal extends JFrame {
             JOptionPane.showMessageDialog(this, mensaje);
             actualizarNotificaciones();
         });
-
+        btnVacunas.addActionListener(e -> {
+            RegistrarVacuna ventana = new RegistrarVacuna();
+            ventana.setVisible(true);
+        });
         actualizarNotificaciones(); // inicializar el número de notificaciones
     }
 

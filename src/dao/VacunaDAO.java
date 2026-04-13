@@ -36,4 +36,24 @@ public class VacunaDAO {
 
         return lista;
     }
+
+    public boolean registrarVacuna(Vacuna vacuna) {
+
+        String sql = "INSERT INTO Vacuna (nombre, tipo, fabricante) VALUES (?, ?, ?)";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, vacuna.getNombre());
+            ps.setString(2, vacuna.getTipo());
+            ps.setString(3, vacuna.getFabricante());
+
+            ps.executeUpdate();
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

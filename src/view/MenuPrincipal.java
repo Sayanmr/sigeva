@@ -15,6 +15,7 @@ public class MenuPrincipal extends JFrame {
     JButton btnUsuarios;
     JButton btnPerfil;
     JButton btnNotificaciones;
+    JButton btnInventario;
 
     // Colores
     private final Color PRIMARY = new Color(46, 134, 193);
@@ -74,6 +75,15 @@ public class MenuPrincipal extends JFrame {
 
         panel.add(botonesPanel, BorderLayout.CENTER);
 
+        btnInventario = new JButton("Inventario");
+        estilizarBoton(btnInventario, PRIMARY, Color.WHITE);
+        botonesPanel.add(btnInventario);
+
+        // Acción del botón
+        btnInventario.addActionListener(e -> {
+            InventarioView inventarioView = new InventarioView();
+            inventarioView.setVisible(true);
+        });
         // Acciones
         btnUsuarios.addActionListener(e -> {
             RegistrarUsuario ventana = new RegistrarUsuario();

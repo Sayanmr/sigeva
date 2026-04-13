@@ -1,13 +1,11 @@
 package view;
 
 import login.LoginDAO;
+import model.Usuario;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import model.Usuario;
 
 public class Login extends JFrame {
 
@@ -15,39 +13,65 @@ public class Login extends JFrame {
     private JPasswordField txtPassword;
     private JButton btnLogin;
 
+    // Colores
+    private final Color PRIMARY = new Color(46, 134, 193);
+    private final Color DARK = new Color(27, 79, 114);
+    private final Color BG = new Color(244, 246, 247);
+    private final Color TEXT = new Color(44, 62, 80);
+
     public Login() {
 
-        setTitle("Sistema de Vacunación - Login");
-        setSize(300, 200);
+        setTitle("Sistema de Vacunación");
+        setSize(400, 300);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
 
-        JLabel lblUsuario = new JLabel("Usuario:");
-        lblUsuario.setBounds(30, 30, 80, 25);
-        add(lblUsuario);
+        JPanel panel = new JPanel();
+        panel.setBackground(BG);
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(new EmptyBorder(20, 30, 20, 30));
+        setContentPane(panel);
+
+        // Título
+        JLabel titulo = new JLabel("Iniciar Sesión");
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        titulo.setForeground(DARK);
+        titulo.setHorizontalAlignment(SwingConstants.CENTER);
+        panel.add(titulo, BorderLayout.NORTH);
+
+        // Formulario
+        JPanel form = new JPanel(new GridLayout(4, 1, 10, 10));
+        form.setBackground(BG);
 
         txtUsuario = new JTextField();
-        txtUsuario.setBounds(120, 30, 120, 25);
-        add(txtUsuario);
-
-        JLabel lblPass = new JLabel("Contraseña:");
-        lblPass.setBounds(30, 70, 80, 25);
-        add(lblPass);
-
         txtPassword = new JPasswordField();
-        txtPassword.setBounds(120, 70, 120, 25);
-        add(txtPassword);
 
+        estilizarCampo(txtUsuario, "Usuario");
+        estilizarCampo(txtPassword, "Contraseña");
+
+        form.add(txtUsuario);
+        form.add(txtPassword);
+
+        // Botón
         btnLogin = new JButton("Ingresar");
-        btnLogin.setBounds(100, 110, 100, 30);
-        add(btnLogin);
+        btnLogin.setBackground(PRIMARY);
+        btnLogin.setForeground(Color.WHITE);
+        btnLogin.setFocusPainted(false);
+        btnLogin.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        btnLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                login();
-            }
-        });
+        form.add(new JLabel()); // espacio
+        form.add(btnLogin);
+
+        panel.add(form, BorderLayout.CENTER);
+
+        // Acción
+        btnLogin.addActionListener(e -> login());
+    }
+
+    private void estilizarCampo(JTextField campo, String placeholder) {
+        campo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        campo.setBorder(BorderFactory.createTitledBorder(placeholder));
     }
 
     private void login() {

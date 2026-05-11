@@ -21,6 +21,8 @@ public class MenuPrincipal extends JFrame {
     JButton btnNotificaciones;
     JButton btnInventario;
     JButton btnSalidaInventario;
+    JButton btnClientes;
+
 
     // Colores
     private final Color PRIMARY = new Color(46, 134, 193);
@@ -73,13 +75,15 @@ public class MenuPrincipal extends JFrame {
         btnPerfil = new JButton("Perfil");
         btnInventario = new JButton("Inventario");
         btnSalidaInventario = new JButton("Salida Inventario");
+        btnClientes = new JButton("Clientes Vacunados");
 
+        estilizarBoton(btnClientes, PRIMARY, Color.WHITE);
         estilizarBoton(btnVacunas, PRIMARY, Color.WHITE);
         estilizarBoton(btnLotes, PRIMARY, Color.WHITE);
         estilizarBoton(btnUsuarios, PRIMARY, Color.WHITE);
         estilizarBoton(btnPerfil, PRIMARY, Color.WHITE);
         estilizarBoton(btnInventario, PRIMARY, Color.WHITE);
-        estilizarBoton(btnSalidaInventario, SUCCESS, Color.WHITE); // verde para acción crítica
+        estilizarBoton(btnSalidaInventario, PRIMARY, Color.WHITE);
 
         botonesPanel.add(btnVacunas);
         botonesPanel.add(btnLotes);
@@ -87,6 +91,7 @@ public class MenuPrincipal extends JFrame {
         botonesPanel.add(btnPerfil);
         botonesPanel.add(btnInventario);
         botonesPanel.add(btnSalidaInventario);
+        botonesPanel.add(btnClientes);
 
         panel.add(botonesPanel, BorderLayout.CENTER);
 
@@ -117,6 +122,12 @@ public class MenuPrincipal extends JFrame {
         btnSalidaInventario.addActionListener(e -> {
             RegistrarSalidaInventarioView vista =
                     new RegistrarSalidaInventarioView(usuario);
+            vista.setVisible(true);
+        });
+        btnClientes.addActionListener(e -> {
+            RegistrarClienteVacunado vista =
+                    new RegistrarClienteVacunado();
+
             vista.setVisible(true);
         });
 

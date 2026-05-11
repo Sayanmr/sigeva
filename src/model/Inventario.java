@@ -8,11 +8,12 @@ public class Inventario {
     private int cantidadDisponible;
     private Date fechaIngreso;
     private Lote lote;
+    private int nivelMinimo;
 
     public Inventario() {
     }
 
-    public Inventario(int idInventario, int cantidadDisponible, Date fechaIngreso, Lote lote) {
+    public Inventario(int idInventario, int cantidadDisponible, Date fechaIngreso, Lote lote,int nivelMinimo) {
         this.idInventario = idInventario;
         this.cantidadDisponible = cantidadDisponible;
         this.fechaIngreso = fechaIngreso;
@@ -49,5 +50,12 @@ public class Inventario {
 
     public void setLote(Lote lote) {
         this.lote = lote;
+    }
+    public int getNivelMinimo() {
+        return nivelMinimo;
+    }
+
+    public void setNivelMinimo(int nivelMinimo) {
+        this.nivelMinimo = nivelMinimo;
     }
 }

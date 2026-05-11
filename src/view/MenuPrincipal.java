@@ -9,6 +9,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
+import model.Notificacion;
+import service.NotificacionService;
+
 public class MenuPrincipal extends JFrame {
 
     JButton btnVacunas;
@@ -97,7 +100,7 @@ public class MenuPrincipal extends JFrame {
         });
 
         btnNotificaciones.addActionListener(e -> {
-            String mensaje = obtenerMensajeLotes();
+            String mensaje = obtenerMensajesNotificaciones();
             JOptionPane.showMessageDialog(this, mensaje);
             actualizarNotificaciones();
         });
@@ -116,30 +119,36 @@ public class MenuPrincipal extends JFrame {
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
-    private String obtenerMensajeLotes() {
-        LoteDAO dao = new LoteDAO();
-        List<Lote> lotes = dao.obtenerLotesPorVencer();
+    private String obtenerMensajesNotificaciones() {
 
-        if (lotes.isEmpty()) {
-            return "No hay lotes próximos a vencer.";
+        NotificacionService service = new NotificacionService();
+
+        List<Notificacion> notificaciones =
+                service.obtenerNotificaciones();
+
+        if (notificaciones.isEmpty()) {
+            return "No hay notificaciones.";
         }
 
-        StringBuilder mensaje = new StringBuilder("⚠ LOTES PRÓXIMOS A VENCER:\n\n");
-        for (Lote lote : lotes) {
-            mensaje.append(lote).append("\n");
+        StringBuilder mensaje = new StringBuilder();
+
+        for (Notificacion n : notificaciones) {
+            mensaje.append(n.toString()).append("\n");
         }
+
         return mensaje.toString();
     }
 
     private void actualizarNotificaciones() {
 
-        LoteDAO dao = new LoteDAO();
-        List<Lote> lotes = dao.obtenerLotesPorVencer();
+        NotificacionService service = new NotificacionService();
 
-        if (lotes.isEmpty()) {
-            btnNotificaciones.setText("🔔");
+        int total = service.obtenerNotificaciones().size();
+
+        if (total == 0) {
+            btnNotificaciones.setText("!");
         } else {
-            btnNotificaciones.setText("🔔 " + lotes.size());
+            btnNotificaciones.setText("! " + total);
         }
     }
 }

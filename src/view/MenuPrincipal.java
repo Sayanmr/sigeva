@@ -20,6 +20,7 @@ public class MenuPrincipal extends JFrame {
     JButton btnPerfil;
     JButton btnNotificaciones;
     JButton btnInventario;
+    JButton btnSalidaInventario;
 
     // Colores
     private final Color PRIMARY = new Color(46, 134, 193);
@@ -31,7 +32,7 @@ public class MenuPrincipal extends JFrame {
     public MenuPrincipal(Usuario usuario) {
 
         setTitle("Sistema de Vacunación");
-        setSize(500, 400);
+        setSize(550, 420);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -41,7 +42,9 @@ public class MenuPrincipal extends JFrame {
         panel.setBorder(new EmptyBorder(20, 20, 20, 20));
         setContentPane(panel);
 
-        // Top panel con notificaciones
+        // =========================
+        // TOP PANEL
+        // =========================
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(BG);
 
@@ -57,38 +60,45 @@ public class MenuPrincipal extends JFrame {
 
         panel.add(topPanel, BorderLayout.NORTH);
 
-        // Panel de botones
-        JPanel botonesPanel = new JPanel(new GridLayout(2, 2, 20, 20));
+        // =========================
+        // BOTONES
+        // =========================
+        JPanel botonesPanel = new JPanel(new GridLayout(3, 2, 15, 15));
         botonesPanel.setBackground(BG);
-        botonesPanel.setBorder(new EmptyBorder(30, 0, 0, 0));
+        botonesPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
         btnVacunas = new JButton("Registrar Vacunas");
         btnLotes = new JButton("Registrar Lotes");
         btnUsuarios = new JButton("Registrar Usuarios");
         btnPerfil = new JButton("Perfil");
+        btnInventario = new JButton("Inventario");
+        btnSalidaInventario = new JButton("Salida Inventario");
 
         estilizarBoton(btnVacunas, PRIMARY, Color.WHITE);
         estilizarBoton(btnLotes, PRIMARY, Color.WHITE);
         estilizarBoton(btnUsuarios, PRIMARY, Color.WHITE);
         estilizarBoton(btnPerfil, PRIMARY, Color.WHITE);
+        estilizarBoton(btnInventario, PRIMARY, Color.WHITE);
+        estilizarBoton(btnSalidaInventario, SUCCESS, Color.WHITE); // verde para acción crítica
 
         botonesPanel.add(btnVacunas);
         botonesPanel.add(btnLotes);
         botonesPanel.add(btnUsuarios);
         botonesPanel.add(btnPerfil);
+        botonesPanel.add(btnInventario);
+        botonesPanel.add(btnSalidaInventario);
 
         panel.add(botonesPanel, BorderLayout.CENTER);
 
-        btnInventario = new JButton("Inventario");
-        estilizarBoton(btnInventario, PRIMARY, Color.WHITE);
-        botonesPanel.add(btnInventario);
+        // =========================
+        // ACCIONES
+        // =========================
 
-        // Acción del botón
         btnInventario.addActionListener(e -> {
             InventarioView inventarioView = new InventarioView();
             inventarioView.setVisible(true);
         });
-        // Acciones
+
         btnUsuarios.addActionListener(e -> {
             RegistrarUsuario ventana = new RegistrarUsuario();
             ventana.setVisible(true);
@@ -99,16 +109,25 @@ public class MenuPrincipal extends JFrame {
             perfil.setVisible(true);
         });
 
+        btnVacunas.addActionListener(e -> {
+            RegistrarVacuna ventana = new RegistrarVacuna();
+            ventana.setVisible(true);
+        });
+
+        btnSalidaInventario.addActionListener(e -> {
+            RegistrarSalidaInventarioView vista =
+                    new RegistrarSalidaInventarioView(usuario);
+            vista.setVisible(true);
+        });
+
+        // Notificaciones
         btnNotificaciones.addActionListener(e -> {
             String mensaje = obtenerMensajesNotificaciones();
             JOptionPane.showMessageDialog(this, mensaje);
             actualizarNotificaciones();
         });
-        btnVacunas.addActionListener(e -> {
-            RegistrarVacuna ventana = new RegistrarVacuna();
-            ventana.setVisible(true);
-        });
-        actualizarNotificaciones(); // inicializar el número de notificaciones
+
+        actualizarNotificaciones();
     }
 
     private void estilizarBoton(JButton boton, Color bg, Color fg) {

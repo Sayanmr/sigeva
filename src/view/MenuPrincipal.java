@@ -1,16 +1,13 @@
 package view;
 
-import model.Lote;
 import model.Usuario;
-import dao.LoteDAO;
+import service.NotificacionService;
+import model.Notificacion;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
-
-import model.Notificacion;
-import service.NotificacionService;
 
 public class MenuPrincipal extends JFrame {
 
@@ -21,8 +18,8 @@ public class MenuPrincipal extends JFrame {
     JButton btnNotificaciones;
     JButton btnInventario;
     JButton btnSalidaInventario;
-    JButton btnClientes;
-
+    JButton btnRegistrarCliente;
+    JButton btnHistorialClientes;
 
     // Colores
     private final Color PRIMARY = new Color(46, 134, 193);
@@ -34,7 +31,7 @@ public class MenuPrincipal extends JFrame {
     public MenuPrincipal(Usuario usuario) {
 
         setTitle("Sistema de Vacunación");
-        setSize(550, 420);
+        setSize(600, 450);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -75,23 +72,30 @@ public class MenuPrincipal extends JFrame {
         btnPerfil = new JButton("Perfil");
         btnInventario = new JButton("Inventario");
         btnSalidaInventario = new JButton("Salida Inventario");
-        btnClientes = new JButton("Historial de Pacientes");
 
-        estilizarBoton(btnClientes, PRIMARY, Color.WHITE);
+        // NUEVOS BOTONES PARA CLIENTES
+        btnRegistrarCliente = new JButton("Registrar Cliente");
+        btnHistorialClientes = new JButton("Historial de Pacientes");
+
+        // Estilizar todos los botones
         estilizarBoton(btnVacunas, PRIMARY, Color.WHITE);
         estilizarBoton(btnLotes, PRIMARY, Color.WHITE);
         estilizarBoton(btnUsuarios, PRIMARY, Color.WHITE);
         estilizarBoton(btnPerfil, PRIMARY, Color.WHITE);
         estilizarBoton(btnInventario, PRIMARY, Color.WHITE);
         estilizarBoton(btnSalidaInventario, PRIMARY, Color.WHITE);
+        estilizarBoton(btnRegistrarCliente, PRIMARY, Color.WHITE);
+        estilizarBoton(btnHistorialClientes, PRIMARY, Color.WHITE);
 
+        // Agregar al panel
         botonesPanel.add(btnVacunas);
         botonesPanel.add(btnLotes);
         botonesPanel.add(btnUsuarios);
         botonesPanel.add(btnPerfil);
         botonesPanel.add(btnInventario);
         botonesPanel.add(btnSalidaInventario);
-        botonesPanel.add(btnClientes);
+        botonesPanel.add(btnRegistrarCliente);
+        botonesPanel.add(btnHistorialClientes);
 
         panel.add(botonesPanel, BorderLayout.CENTER);
 
@@ -125,16 +129,19 @@ public class MenuPrincipal extends JFrame {
             vista.setVisible(true);
         });
 
-        // Aquí abrimos la ventana de historial de vacunación
-        btnClientes.addActionListener(e -> {
+        btnRegistrarCliente.addActionListener(e -> {
+            RegistrarClienteVacunado registroCliente = new RegistrarClienteVacunado();
+            registroCliente.setVisible(true);
+        });
+
+        btnHistorialClientes.addActionListener(e -> {
             HistorialVacunacionView historialView = new HistorialVacunacionView();
             historialView.setVisible(true);
         });
 
         // Notificaciones
         btnNotificaciones.addActionListener(e -> {
-            String mensaje = obtenerMensajesNotificaciones();
-            JOptionPane.showMessageDialog(this, mensaje);
+            mostrarNotificaciones();
             actualizarNotificaciones();
         });
 
@@ -180,5 +187,51 @@ public class MenuPrincipal extends JFrame {
         } else {
             btnNotificaciones.setText("! " + total);
         }
+    }
+    private void mostrarNotificaciones() {
+        NotificacionService service = new NotificacionService();
+        List<Notificacion> notificaciones = service.obtenerNotificaciones();
+
+        if (notificaciones.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay notificaciones.",
+                    "Notificaciones", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        // Panel principal para las notificaciones
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(BG);
+
+        for (Notificacion n : notificaciones) {
+            JPanel notifPanel = new JPanel(new BorderLayout());
+            notifPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            notifPanel.setMaximumSize(new Dimension(400, 80));
+
+            // Colores según tipo de notificación
+            Color bgColor = n.getTipo().equals("LOTE") ? new Color(241, 196, 15) : new Color(231, 76, 60);
+            notifPanel.setBackground(bgColor);
+            notifPanel.setOpaque(true);
+
+            JLabel lblMensaje = new JLabel("<html>" + n.getMensaje() + "</html>");
+            lblMensaje.setForeground(Color.WHITE);
+            lblMensaje.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+            notifPanel.add(lblMensaje, BorderLayout.CENTER);
+            notifPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            panel.add(notifPanel);
+            panel.add(Box.createRigidArea(new Dimension(0, 10))); // espacio entre notificaciones
+        }
+
+        JScrollPane scroll = new JScrollPane(panel);
+        scroll.setPreferredSize(new Dimension(450, 300));
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+
+        JDialog dialog = new JDialog(this, "Notificaciones", true);
+        dialog.getContentPane().add(scroll);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 }

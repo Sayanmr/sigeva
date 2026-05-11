@@ -65,7 +65,7 @@ public class MenuPrincipal extends JFrame {
         // =========================
         // BOTONES
         // =========================
-        JPanel botonesPanel = new JPanel(new GridLayout(3, 2, 15, 15));
+        JPanel botonesPanel = new JPanel(new GridLayout(4, 2, 15, 15));
         botonesPanel.setBackground(BG);
         botonesPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
@@ -75,7 +75,7 @@ public class MenuPrincipal extends JFrame {
         btnPerfil = new JButton("Perfil");
         btnInventario = new JButton("Inventario");
         btnSalidaInventario = new JButton("Salida Inventario");
-        btnClientes = new JButton("Clientes Vacunados");
+        btnClientes = new JButton("Historial de Pacientes");
 
         estilizarBoton(btnClientes, PRIMARY, Color.WHITE);
         estilizarBoton(btnVacunas, PRIMARY, Color.WHITE);
@@ -124,11 +124,11 @@ public class MenuPrincipal extends JFrame {
                     new RegistrarSalidaInventarioView(usuario);
             vista.setVisible(true);
         });
-        btnClientes.addActionListener(e -> {
-            RegistrarClienteVacunado vista =
-                    new RegistrarClienteVacunado();
 
-            vista.setVisible(true);
+        // Aquí abrimos la ventana de historial de vacunación
+        btnClientes.addActionListener(e -> {
+            HistorialVacunacionView historialView = new HistorialVacunacionView();
+            historialView.setVisible(true);
         });
 
         // Notificaciones

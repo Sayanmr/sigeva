@@ -3,11 +3,18 @@ package view;
 import model.Usuario;
 import service.NotificacionService;
 import model.Notificacion;
+import export.ExportService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
+import java.io.FileWriter;
+import java.util.List;
+
+import dao.InventarioDAO;
+import model.Inventario;
+
 
 public class MenuPrincipal extends JFrame {
 
@@ -24,13 +31,15 @@ public class MenuPrincipal extends JFrame {
     JButton btnReporteInventario;
     JButton btnReporteVacunas;
     JButton btnReportePerdidasVencimientos;
+    JButton btnExportarInventarioExcel = new JButton("Exportar Excel Inventario");
+    JButton btnExportarInventarioPDF = new JButton("Exportar PDF Inventario");
 
-    // Colores
     private final Color PRIMARY = new Color(46, 134, 193);
     private final Color DARK = new Color(27, 79, 114);
     private final Color BG = new Color(244, 246, 247);
-    private final Color TEXT = new Color(44, 62, 80);
     private final Color SUCCESS = new Color(39, 174, 96);
+
+    private ExportService exportService;
 
     public MenuPrincipal(Usuario usuario) {
 
@@ -38,6 +47,9 @@ public class MenuPrincipal extends JFrame {
         setSize(600, 450);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // ✅ CORRECTO: inicialización del servicio
+        this.exportService = new ExportService();
 
         JPanel panel = new JPanel();
         panel.setBackground(BG);
@@ -66,7 +78,7 @@ public class MenuPrincipal extends JFrame {
         // =========================
         // BOTONES
         // =========================
-        JPanel botonesPanel = new JPanel(new GridLayout(7,2,15,15));
+        JPanel botonesPanel = new JPanel(new GridLayout(7, 2, 15, 15));
         botonesPanel.setBackground(BG);
         botonesPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
@@ -77,7 +89,6 @@ public class MenuPrincipal extends JFrame {
         btnInventario = new JButton("Inventario");
         btnSalidaInventario = new JButton("Salida Inventario");
 
-        // NUEVOS BOTONES PARA CLIENTES
         btnRegistrarCliente = new JButton("Registrar Cliente");
         btnHistorialClientes = new JButton("Historial de Pacientes");
         btnTrazabilidad = new JButton("Trazabilidad de Lotes");
@@ -85,7 +96,6 @@ public class MenuPrincipal extends JFrame {
         btnReporteVacunas = new JButton("Reporte Vacunas");
         btnReportePerdidasVencimientos = new JButton("Reporte Pérdidas y Vencimientos");
 
-        // Estilizar todos los botones
         estilizarBoton(btnVacunas, PRIMARY, Color.WHITE);
         estilizarBoton(btnLotes, PRIMARY, Color.WHITE);
         estilizarBoton(btnUsuarios, PRIMARY, Color.WHITE);
@@ -98,8 +108,9 @@ public class MenuPrincipal extends JFrame {
         estilizarBoton(btnReporteInventario, SUCCESS, Color.WHITE);
         estilizarBoton(btnReporteVacunas, SUCCESS, Color.WHITE);
         estilizarBoton(btnReportePerdidasVencimientos, SUCCESS, Color.WHITE);
+        estilizarBoton(btnExportarInventarioExcel, SUCCESS, Color.WHITE);
+        estilizarBoton(btnExportarInventarioPDF, SUCCESS, Color.WHITE);
 
-        // Agregar al panel
         botonesPanel.add(btnVacunas);
         botonesPanel.add(btnLotes);
         botonesPanel.add(btnUsuarios);
@@ -112,6 +123,8 @@ public class MenuPrincipal extends JFrame {
         botonesPanel.add(btnReporteInventario);
         botonesPanel.add(btnReporteVacunas);
         botonesPanel.add(btnReportePerdidasVencimientos);
+        botonesPanel.add(btnExportarInventarioExcel);
+        botonesPanel.add(btnExportarInventarioPDF);
 
         panel.add(botonesPanel, BorderLayout.CENTER);
 
@@ -119,72 +132,57 @@ public class MenuPrincipal extends JFrame {
         // ACCIONES
         // =========================
 
-        btnInventario.addActionListener(e -> {
-            InventarioView inventarioView = new InventarioView();
-            inventarioView.setVisible(true);
+        btnExportarInventarioExcel.addActionListener(e -> {
+
+            JFileChooser chooser = new JFileChooser();
+            int option = chooser.showSaveDialog(this);
+
+            if (option == JFileChooser.APPROVE_OPTION) {
+
+                String path = chooser.getSelectedFile().getAbsolutePath() + ".xlsx";
+
+                exportService.exportarInventarioExcel(path);
+
+                JOptionPane.showMessageDialog(this,
+                        "Excel exportado correctamente");
+            }
         });
 
-        btnUsuarios.addActionListener(e -> {
-            RegistrarUsuario ventana = new RegistrarUsuario();
-            ventana.setVisible(true);
+        btnExportarInventarioPDF.addActionListener(e -> {
+
+            JFileChooser chooser = new JFileChooser();
+            int option = chooser.showSaveDialog(this);
+
+            if (option == JFileChooser.APPROVE_OPTION) {
+
+                String path = chooser.getSelectedFile().getAbsolutePath() + ".pdf";
+
+                exportService.exportarInventarioPDF(path);
+
+                JOptionPane.showMessageDialog(this,
+                        "PDF exportado correctamente");
+            }
         });
 
-        btnPerfil.addActionListener(e -> {
-            PerfilUsuario perfil = new PerfilUsuario(usuario);
-            perfil.setVisible(true);
-        });
-
-        btnVacunas.addActionListener(e -> {
-            RegistrarVacuna ventana = new RegistrarVacuna();
-            ventana.setVisible(true);
-        });
-
-        btnSalidaInventario.addActionListener(e -> {
-            RegistrarSalidaInventarioView vista =
-                    new RegistrarSalidaInventarioView(usuario);
-            vista.setVisible(true);
-        });
-
-        btnRegistrarCliente.addActionListener(e -> {
-            RegistrarClienteVacunado registroCliente = new RegistrarClienteVacunado();
-            registroCliente.setVisible(true);
-        });
-
-        btnHistorialClientes.addActionListener(e -> {
-            HistorialVacunacionView historialView = new HistorialVacunacionView();
-            historialView.setVisible(true);
-        });
-
-        btnTrazabilidad.addActionListener(e -> {
-            TrazabilidadLoteView vista = new TrazabilidadLoteView();
-            vista.setVisible(true);
-        });
-
-        btnReporteInventario.addActionListener(e -> {
-            ReporteInventarioView vista = new ReporteInventarioView();
-            vista.setVisible(true);
-        });
-        btnReporteVacunas.addActionListener(e -> {
-
-            ReporteVacunasAplicadasView vista =
-                    new ReporteVacunasAplicadasView();
-
-            vista.setVisible(true);
-
-        });
-        btnReportePerdidasVencimientos.addActionListener(e -> {
-            ReportePerdidasVencimientosView vista =
-                    new ReportePerdidasVencimientosView();
-
-            vista.setVisible(true);
-        });
-
-        // Notificaciones
         btnNotificaciones.addActionListener(e -> {
             mostrarNotificaciones();
             actualizarNotificaciones();
         });
+        btnExportarInventarioExcel.addActionListener(e -> {
 
+            JFileChooser chooser = new JFileChooser();
+            int option = chooser.showSaveDialog(this);
+
+            if (option == JFileChooser.APPROVE_OPTION) {
+
+                String path = chooser.getSelectedFile().getAbsolutePath();
+
+                exportService.exportarInventarioCSV(path);
+
+                JOptionPane.showMessageDialog(this,
+                        "CSV exportado correctamente");
+            }
+        });
         actualizarNotificaciones();
     }
 
@@ -194,26 +192,6 @@ public class MenuPrincipal extends JFrame {
         boton.setFocusPainted(false);
         boton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }
-
-    private String obtenerMensajesNotificaciones() {
-
-        NotificacionService service = new NotificacionService();
-
-        List<Notificacion> notificaciones =
-                service.obtenerNotificaciones();
-
-        if (notificaciones.isEmpty()) {
-            return "No hay notificaciones.";
-        }
-
-        StringBuilder mensaje = new StringBuilder();
-
-        for (Notificacion n : notificaciones) {
-            mensaje.append(n.toString()).append("\n");
-        }
-
-        return mensaje.toString();
     }
 
     private void actualizarNotificaciones() {
@@ -230,49 +208,45 @@ public class MenuPrincipal extends JFrame {
     }
 
     private void mostrarNotificaciones() {
+
         NotificacionService service = new NotificacionService();
         List<Notificacion> notificaciones = service.obtenerNotificaciones();
 
         if (notificaciones.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No hay notificaciones.",
-                    "Notificaciones", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "No hay notificaciones.");
             return;
         }
 
-        // Panel principal para las notificaciones
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(BG);
 
         for (Notificacion n : notificaciones) {
-            JPanel notifPanel = new JPanel(new BorderLayout());
-            notifPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            notifPanel.setMaximumSize(new Dimension(400, 80));
 
-            // Colores según tipo de notificación
-            Color bgColor = n.getTipo().equals("LOTE") ? new Color(241, 196, 15) : new Color(231, 76, 60);
-            notifPanel.setBackground(bgColor);
-            notifPanel.setOpaque(true);
+            JPanel p = new JPanel(new BorderLayout());
+            p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-            JLabel lblMensaje = new JLabel("<html>" + n.getMensaje() + "</html>");
-            lblMensaje.setForeground(Color.WHITE);
-            lblMensaje.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            Color bg = n.getTipo().equals("LOTE")
+                    ? new Color(241, 196, 15)
+                    : new Color(231, 76, 60);
 
-            notifPanel.add(lblMensaje, BorderLayout.CENTER);
-            notifPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            p.setBackground(bg);
 
-            panel.add(notifPanel);
-            panel.add(Box.createRigidArea(new Dimension(0, 10))); // espacio entre notificaciones
+            JLabel lbl = new JLabel(n.getMensaje());
+            lbl.setForeground(Color.WHITE);
+
+            p.add(lbl);
+
+            panel.add(p);
         }
 
         JScrollPane scroll = new JScrollPane(panel);
-        scroll.setPreferredSize(new Dimension(450, 300));
-        scroll.setBorder(BorderFactory.createEmptyBorder());
 
         JDialog dialog = new JDialog(this, "Notificaciones", true);
-        dialog.getContentPane().add(scroll);
-        dialog.pack();
+        dialog.add(scroll);
+        dialog.setSize(400, 300);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }
+
 }

@@ -13,6 +13,7 @@ import java.util.List;
 public class ReporteInventarioView extends JFrame {
 
     private JTable tabla;
+    JComboBox<String> cmbFormato = new JComboBox<>(new String[]{"PDF", "Excel"});
 
     // Colores consistentes con MenuPrincipal
     private final Color PRIMARY = new Color(46, 134, 193);

@@ -21,6 +21,7 @@
         JButton btnRegistrarCliente;
         JButton btnHistorialClientes;
         JButton btnTrazabilidad;
+        JButton btnReporteInventario;
 
         // Colores
         private final Color PRIMARY = new Color(46, 134, 193);
@@ -78,6 +79,7 @@
             btnRegistrarCliente = new JButton("Registrar Cliente");
             btnHistorialClientes = new JButton("Historial de Pacientes");
             btnTrazabilidad = new JButton("Trazabilidad de Lotes");
+            btnReporteInventario = new JButton("Reporte Inventario");
 
             // Estilizar todos los botones
             estilizarBoton(btnVacunas, PRIMARY, Color.WHITE);
@@ -89,6 +91,7 @@
             estilizarBoton(btnRegistrarCliente, PRIMARY, Color.WHITE);
             estilizarBoton(btnHistorialClientes, PRIMARY, Color.WHITE);
             estilizarBoton(btnTrazabilidad, PRIMARY, Color.WHITE);
+            estilizarBoton(btnReporteInventario, SUCCESS, Color.WHITE);
 
             // Agregar al panel
             botonesPanel.add(btnVacunas);
@@ -100,6 +103,7 @@
             botonesPanel.add(btnRegistrarCliente);
             botonesPanel.add(btnHistorialClientes);
             botonesPanel.add(btnTrazabilidad);
+            botonesPanel.add(btnReporteInventario);
 
             panel.add(botonesPanel, BorderLayout.CENTER);
 
@@ -145,6 +149,11 @@
 
             btnTrazabilidad.addActionListener(e -> {
                 TrazabilidadLoteView vista = new TrazabilidadLoteView();
+                vista.setVisible(true);
+            });
+
+            btnReporteInventario.addActionListener(e -> {
+                ReporteInventarioView vista = new ReporteInventarioView();
                 vista.setVisible(true);
             });
 

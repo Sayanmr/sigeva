@@ -23,6 +23,7 @@ public class MenuPrincipal extends JFrame {
     JButton btnTrazabilidad;
     JButton btnReporteInventario;
     JButton btnReporteVacunas;
+    JButton btnReportePerdidasVencimientos;
 
     // Colores
     private final Color PRIMARY = new Color(46, 134, 193);
@@ -65,7 +66,7 @@ public class MenuPrincipal extends JFrame {
         // =========================
         // BOTONES
         // =========================
-        JPanel botonesPanel = new JPanel(new GridLayout(6,2,15,15));
+        JPanel botonesPanel = new JPanel(new GridLayout(7,2,15,15));
         botonesPanel.setBackground(BG);
         botonesPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
@@ -82,6 +83,7 @@ public class MenuPrincipal extends JFrame {
         btnTrazabilidad = new JButton("Trazabilidad de Lotes");
         btnReporteInventario = new JButton("Reporte Inventario");
         btnReporteVacunas = new JButton("Reporte Vacunas");
+        btnReportePerdidasVencimientos = new JButton("Reporte Pérdidas y Vencimientos");
 
         // Estilizar todos los botones
         estilizarBoton(btnVacunas, PRIMARY, Color.WHITE);
@@ -95,6 +97,8 @@ public class MenuPrincipal extends JFrame {
         estilizarBoton(btnTrazabilidad, PRIMARY, Color.WHITE);
         estilizarBoton(btnReporteInventario, SUCCESS, Color.WHITE);
         estilizarBoton(btnReporteVacunas, SUCCESS, Color.WHITE);
+        estilizarBoton(btnReportePerdidasVencimientos, SUCCESS, Color.WHITE);
+
         // Agregar al panel
         botonesPanel.add(btnVacunas);
         botonesPanel.add(btnLotes);
@@ -107,6 +111,7 @@ public class MenuPrincipal extends JFrame {
         botonesPanel.add(btnTrazabilidad);
         botonesPanel.add(btnReporteInventario);
         botonesPanel.add(btnReporteVacunas);
+        botonesPanel.add(btnReportePerdidasVencimientos);
 
         panel.add(botonesPanel, BorderLayout.CENTER);
 
@@ -166,6 +171,12 @@ public class MenuPrincipal extends JFrame {
 
             vista.setVisible(true);
 
+        });
+        btnReportePerdidasVencimientos.addActionListener(e -> {
+            ReportePerdidasVencimientosView vista =
+                    new ReportePerdidasVencimientosView();
+
+            vista.setVisible(true);
         });
 
         // Notificaciones

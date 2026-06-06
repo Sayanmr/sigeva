@@ -11,7 +11,7 @@ public class LoginDAO {
 
     public Usuario login(String usuarioTxt, String contraseñaTxt) {
 
-        String sql = "SELECT * FROM Usuario WHERE usuario=? AND contraseña=?";
+        String sql = "SELECT * FROM Usuario WHERE usuario=? AND password=?";
         Usuario usuario = null;
 
         try {
@@ -28,7 +28,7 @@ public class LoginDAO {
                 usuario.setIdUsuario(rs.getInt("idUsuario"));
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setUsuario(rs.getString("usuario"));
-                usuario.setContraseña(rs.getString("contraseña"));
+                usuario.setContraseña(rs.getString("password"));
                 usuario.setRol(rs.getString("rol"));
             }
 

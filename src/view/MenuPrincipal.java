@@ -9,8 +9,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
-import java.io.FileWriter;
-import java.util.List;
 
 import dao.InventarioDAO;
 import model.Inventario;
@@ -48,7 +46,6 @@ public class MenuPrincipal extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // ✅ CORRECTO: inicialización del servicio
         this.exportService = new ExportService();
 
         JPanel panel = new JPanel();
@@ -132,35 +129,47 @@ public class MenuPrincipal extends JFrame {
         // ACCIONES
         // =========================
 
-        btnExportarInventarioExcel.addActionListener(e -> {
+        btnVacunas.addActionListener(e -> new RegistrarVacuna().setVisible(true));
 
+        btnLotes.addActionListener(e -> new TrazabilidadLoteView().setVisible(true));
+
+        btnUsuarios.addActionListener(e -> new RegistrarUsuario().setVisible(true));
+
+        btnPerfil.addActionListener(e -> new PerfilUsuario(usuario).setVisible(true));
+
+        btnInventario.addActionListener(e -> new InventarioView().setVisible(true));
+
+        btnSalidaInventario.addActionListener(e -> new RegistrarSalidaInventarioView(usuario).setVisible(true));
+
+        btnRegistrarCliente.addActionListener(e -> new RegistrarClienteVacunado().setVisible(true));
+
+        btnHistorialClientes.addActionListener(e -> new HistorialVacunacionView().setVisible(true));
+
+        btnTrazabilidad.addActionListener(e -> new TrazabilidadLoteView().setVisible(true));
+
+        btnReporteInventario.addActionListener(e -> new ReporteInventarioView().setVisible(true));
+
+        btnReporteVacunas.addActionListener(e -> new ReporteVacunasAplicadasView().setVisible(true));
+
+        btnReportePerdidasVencimientos.addActionListener(e -> new ReportePerdidasVencimientosView().setVisible(true));
+
+        btnExportarInventarioExcel.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
             int option = chooser.showSaveDialog(this);
-
             if (option == JFileChooser.APPROVE_OPTION) {
-
                 String path = chooser.getSelectedFile().getAbsolutePath() + ".xlsx";
-
                 exportService.exportarInventarioExcel(path);
-
-                JOptionPane.showMessageDialog(this,
-                        "Excel exportado correctamente");
+                JOptionPane.showMessageDialog(this, "Excel exportado correctamente");
             }
         });
 
         btnExportarInventarioPDF.addActionListener(e -> {
-
             JFileChooser chooser = new JFileChooser();
             int option = chooser.showSaveDialog(this);
-
             if (option == JFileChooser.APPROVE_OPTION) {
-
                 String path = chooser.getSelectedFile().getAbsolutePath() + ".pdf";
-
                 exportService.exportarInventarioPDF(path);
-
-                JOptionPane.showMessageDialog(this,
-                        "PDF exportado correctamente");
+                JOptionPane.showMessageDialog(this, "PDF exportado correctamente");
             }
         });
 
@@ -168,21 +177,7 @@ public class MenuPrincipal extends JFrame {
             mostrarNotificaciones();
             actualizarNotificaciones();
         });
-        btnExportarInventarioExcel.addActionListener(e -> {
 
-            JFileChooser chooser = new JFileChooser();
-            int option = chooser.showSaveDialog(this);
-
-            if (option == JFileChooser.APPROVE_OPTION) {
-
-                String path = chooser.getSelectedFile().getAbsolutePath();
-
-                exportService.exportarInventarioCSV(path);
-
-                JOptionPane.showMessageDialog(this,
-                        "CSV exportado correctamente");
-            }
-        });
         actualizarNotificaciones();
     }
 
@@ -195,11 +190,8 @@ public class MenuPrincipal extends JFrame {
     }
 
     private void actualizarNotificaciones() {
-
         NotificacionService service = new NotificacionService();
-
         int total = service.obtenerNotificaciones().size();
-
         if (total == 0) {
             btnNotificaciones.setText("!");
         } else {
@@ -208,13 +200,11 @@ public class MenuPrincipal extends JFrame {
     }
 
     private void mostrarNotificaciones() {
-
         NotificacionService service = new NotificacionService();
         List<Notificacion> notificaciones = service.obtenerNotificaciones();
 
         if (notificaciones.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "No hay notificaciones.");
+            JOptionPane.showMessageDialog(this, "No hay notificaciones.");
             return;
         }
 
@@ -222,7 +212,6 @@ public class MenuPrincipal extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         for (Notificacion n : notificaciones) {
-
             JPanel p = new JPanel(new BorderLayout());
             p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -234,9 +223,7 @@ public class MenuPrincipal extends JFrame {
 
             JLabel lbl = new JLabel(n.getMensaje());
             lbl.setForeground(Color.WHITE);
-
             p.add(lbl);
-
             panel.add(p);
         }
 
